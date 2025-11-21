@@ -45,7 +45,6 @@ router.post('/login', (req, res) => {
 
 // F10: Wylogowanie – на фронте просто удаляем токен
 router.post('/logout', (req, res) => {
-  // backend может просто вернуть ok, токен не хранится
   res.json({ message: 'Logged out (usun token w aplikacji)' });
 });
 

@@ -11,7 +11,7 @@ router.get('/current', auth, async (req, res) => {
     const table = await getCurrentTableA();
     const effectiveDate = table.effectiveDate;
 
-    // zapis do EXCHANGE_RATES (простое решение: чистим и вставляем заново)
+    // zapis do EXCHANGE_RATES 
     db.serialize(() => {
       db.run('DELETE FROM EXCHANGE_RATES');
 
@@ -30,7 +30,7 @@ router.get('/current', auth, async (req, res) => {
   }
 });
 
-// archiwalne kursy – упрощённо: читаем из EXCHANGE_RATES_HISTORY
+// archiwalne kursy  EXCHANGE_RATES_HISTORY
 router.get('/history/:code', auth, (req, res) => {
   const { code } = req.params;
   db.all(

@@ -5,7 +5,7 @@ require('dotenv').config();
 const dbPath = path.join(__dirname, process.env.DB_FILE || 'walutka.db');
 const db = new sqlite3.Database(dbPath);
 
-// Tworzenie tabel zgodnie z ERD
+//  ERD
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS USERS (

@@ -10,7 +10,7 @@ export default function HistoryScreen() {
     try {
       setLoading(true);
       const res = await api.get('/transactions/history');
-      setItems(res.data); // список транзакций
+      setItems(res.data); 
     } catch (err) {
       console.log('ERR HISTORY:', err?.response?.data || err.message);
     } finally {

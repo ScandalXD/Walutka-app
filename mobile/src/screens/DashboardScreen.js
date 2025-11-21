@@ -5,9 +5,8 @@ export default function DashboardScreen({ navigation, onLogout }) {
   return (
     <View style={{ padding: 16 }}>
       <Text style={{ fontSize: 24, marginBottom: 16 }}>
-        Kantor mobilny – panel główny
+        Kantor mobilny 'Walutka' – panel główny
       </Text>
-
       <Button
         title="Zasil konto (PLN)"
         onPress={() => navigation.navigate('WalletTopUp')}
