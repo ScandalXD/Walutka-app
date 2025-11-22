@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Button } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import RateItem from '../components/RateItem';
 
 export default function RatesScreen() {
   const [rates, setRates] = useState([]);
@@ -31,9 +32,7 @@ export default function RatesScreen() {
 
       <Button title="Odśwież kursy" onPress={loadRates} />
 
-      {date && (
-        <Text style={{ marginTop: 8 }}>Data tabeli: {date}</Text>
-      )}
+      {date && <Text style={{ marginTop: 8 }}>Data tabeli: {date}</Text>}
 
       {loading ? (
         <ActivityIndicator size="large" style={{ marginTop: 16 }} />
@@ -43,10 +42,11 @@ export default function RatesScreen() {
           data={rates}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
-            <View style={styles.cardRow}>
-              <Text>{item.code}</Text>
-              <Text>{item.mid}</Text>
-            </View>
+            <RateItem
+              code={item.code}
+              mid={item.mid}
+              currencyName={item.currency}
+            />
           )}
         />
       )}

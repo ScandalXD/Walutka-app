@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import TransactionItem from '../components/TransactionItem';
 
 export default function HistoryScreen() {
   const [items, setItems] = useState([]);
@@ -24,18 +25,16 @@ export default function HistoryScreen() {
   }, []);
 
   const renderItem = ({ item }) => (
-    <View style={styles.cardRow}>
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontWeight: 'bold' }}>
-          {item.type} {item.currency_from} → {item.currency_to}
-        </Text>
-        <Text>
-          Kwota: {item.amount}  |  Kurs: {item.rate ?? '-'}
-        </Text>
-        <Text style={{ fontSize: 11, color: 'grey' }}>{item.created_at}</Text>
-      </View>
-    </View>
+    <TransactionItem
+      type={item.type}
+      currency_from={item.currency_from}
+      currency_to={item.currency_to}
+      amount={item.amount}
+      rate={item.rate}
+      created_at={item.created_at}
+    />
   );
+
 
   return (
     <View style={styles.container}>
