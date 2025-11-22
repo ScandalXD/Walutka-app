@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import api from '../api/apiClient';
+import { styles } from '../styles/globalStyles';
 
 export default function TradeScreen() {
   const [mode, setMode] = useState('BUY'); // BUY / SELL
@@ -22,7 +23,6 @@ export default function TradeScreen() {
 
     try {
       if (mode === 'BUY') {
-        // kupujemy walutę za PLN
         const res = await api.post('/transactions/buy', {
           currencyTo: currency.toUpperCase(),
           amountPln: value,
@@ -32,7 +32,6 @@ export default function TradeScreen() {
           `Kupiono ${res.data.amountForeign.toFixed(2)} ${currency.toUpperCase()} po kursie ${res.data.rate}`
         );
       } else {
-        // sprzedajemy walutę obcą za PLN
         const res = await api.post('/transactions/sell', {
           currencyFrom: currency.toUpperCase(),
           amountForeign: value,
@@ -42,7 +41,6 @@ export default function TradeScreen() {
           `Sprzedano za ${res.data.amountPln.toFixed(2)} PLN po kursie ${res.data.rate}`
         );
       }
-
       setAmount('');
     } catch (err) {
       console.log('ERR TRADE:', err?.response?.data || err.message);
@@ -55,51 +53,63 @@ export default function TradeScreen() {
   };
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 8 }}>Kup / sprzedaj walutę</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Kup / sprzedaj walutę</Text>
 
       <View style={{ flexDirection: 'row', marginBottom: 12 }}>
         <TouchableOpacity
-          style={{
-            flex: 1,
-            padding: 8,
-            borderWidth: 1,
-            backgroundColor: mode === 'BUY' ? '#cceeff' : 'white',
-          }}
+          style={[
+            {
+              flex: 1,
+              padding: 8,
+              borderWidth: 1,
+              borderColor: '#aac4f4',
+              borderRadius: 8,
+              marginRight: 4,
+              backgroundColor: 'white',
+            },
+            mode === 'BUY' && { backgroundColor: '#cceeff' },
+          ]}
           onPress={() => setMode('BUY')}
         >
           <Text style={{ textAlign: 'center' }}>Kupno</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            flex: 1,
-            padding: 8,
-            borderWidth: 1,
-            borderLeftWidth: 0,
-            backgroundColor: mode === 'SELL' ? '#cceeff' : 'white',
-          }}
+          style={[
+            {
+              flex: 1,
+              padding: 8,
+              borderWidth: 1,
+              borderColor: '#aac4f4',
+              borderRadius: 8,
+              marginLeft: 4,
+              backgroundColor: 'white',
+            },
+            mode === 'SELL' && { backgroundColor: '#cceeff' },
+          ]}
           onPress={() => setMode('SELL')}
         >
           <Text style={{ textAlign: 'center' }}>Sprzedaż</Text>
         </TouchableOpacity>
       </View>
 
-      <Text>Kod waluty (np. EUR, USD):</Text>
+      <Text style={styles.label}>Kod waluty (np. EUR, USD)</Text>
       <TextInput
+        style={styles.input}
         value={currency}
         onChangeText={setCurrency}
         autoCapitalize="characters"
-        style={{ borderWidth: 1, marginBottom: 12, padding: 8 }}
       />
 
-      <Text>
-        Kwota {mode === 'BUY' ? 'w PLN (do zapłaty)' : 'w walucie obcej (do sprzedaży)'}:
+      <Text style={styles.label}>
+        Kwota {mode === 'BUY' ? 'w PLN (do zapłaty)' : 'w walucie obcej (do sprzedaży)'}
       </Text>
       <TextInput
+        style={styles.input}
         value={amount}
         onChangeText={setAmount}
         keyboardType="numeric"
-        style={{ borderWidth: 1, marginBottom: 16, padding: 8 }}
+        placeholder={mode === 'BUY' ? 'np. 100' : 'np. 10'}
       />
 
       <Button

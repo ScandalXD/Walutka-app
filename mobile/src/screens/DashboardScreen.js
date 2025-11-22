@@ -1,38 +1,80 @@
 import React from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { styles } from '../styles/globalStyles';
 
 export default function DashboardScreen({ navigation, onLogout }) {
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 24, marginBottom: 16 }}>
-        Kantor mobilny 'Walutka' – panel główny
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Kantor mobilny</Text>
+      <Text style={{ marginBottom: 12, color: '#555' }}>
+        Wybierz jedną z dostępnych opcji, aby zarządzać swoim portfelem
+        walutowym.
       </Text>
-      <Button
-        title="Zasil konto (PLN)"
-        onPress={() => navigation.navigate('WalletTopUp')}
-      />
-      <View style={{ height: 8 }} />
-      <Button
-        title="Aktualne kursy walut"
-        onPress={() => navigation.navigate('Rates')}
-      />
-      <View style={{ height: 8 }} />
-      <Button
-        title="Portfel walutowy"
-        onPress={() => navigation.navigate('Portfolio')}
-      />
-      <View style={{ height: 8 }} />
-      <Button
-        title="Historia transakcji"
-        onPress={() => navigation.navigate('History')}
-      />
-      <View style={{ height: 16 }} />
-      <Button title="Wyloguj" color="red" onPress={onLogout} />
 
-      <View style={{ height: 8 }} />
-      <Button title="Kup / sprzedaj walutę" onPress={() => navigation.navigate('Trade')} />
-    </View>
+      <View style={styles.menuSection}>
+        <Text style={styles.subtitle}>Operacje na koncie</Text>
 
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('WalletTopUp')}
+        >
+          <Text style={styles.menuButtonText}>Zasil konto (PLN)</Text>
+        </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('Trade')}
+        >
+          <Text style={styles.menuButtonText}>Kup / sprzedaj walutę</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.menuSection}>
+        <Text style={styles.subtitle}>Kursy walut</Text>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('Rates')}
+        >
+          <Text style={styles.menuButtonText}>Aktualne kursy walut</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('RatesHistory')}
+        >
+          <Text style={styles.menuButtonText}>Archiwalne kursy walut</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.menuSection}>
+        <Text style={styles.subtitle}>Twój portfel</Text>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('Portfolio')}
+        >
+          <Text style={styles.menuButtonText}>Stan portfela walutowego</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.navigate('History')}
+        >
+          <Text style={styles.menuButtonText}>Historia transakcji</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={[styles.menuSection, { marginBottom: 24 }]}>
+        <TouchableOpacity
+          style={[styles.menuButton, styles.logoutButton]}
+          onPress={onLogout}
+        >
+          <Text style={[styles.menuButtonText, { color: 'white' }]}>
+            Wyloguj
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }

@@ -9,6 +9,7 @@ import RatesScreen from '../screens/RatesScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import PortfolioScreen from '../screens/PortfolioScreen';
 import TradeScreen from '../screens/TradeScreen';
+import RatesHistoryScreen from '../screens/RatesHistoryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,11 @@ export default function AppNavigator({ isLoggedIn, onLogin, onLogout }) {
               name="Portfolio"
               component={PortfolioScreen}
               options={{ title: 'Portfel walutowy' }}
+            />
+            <Stack.Screen
+              name="RatesHistory"
+              component={RatesHistoryScreen}
+              options={{ title: 'Archiwalne kursy' }}
             />
           </>
         )}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Button } from 'react-native';
 import api from '../api/apiClient';
+import { styles } from '../styles/globalStyles';
 
 export default function RatesScreen() {
   const [rates, setRates] = useState([]);
@@ -14,7 +15,7 @@ export default function RatesScreen() {
       setRates(res.data.rates || []);
       setDate(res.data.effectiveDate);
     } catch (err) {
-      console.log(err?.response?.data);
+      console.log('ERR RATES:', err?.response?.data || err.message);
     } finally {
       setLoading(false);
     }
@@ -25,25 +26,24 @@ export default function RatesScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={styles.container}>
+      <Text style={styles.title}>Aktualne kursy walut</Text>
+
       <Button title="Odśwież kursy" onPress={loadRates} />
+
       {date && (
-        <Text style={{ marginVertical: 8 }}>Data tabeli: {date}</Text>
+        <Text style={{ marginTop: 8 }}>Data tabeli: {date}</Text>
       )}
+
       {loading ? (
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" style={{ marginTop: 16 }} />
       ) : (
         <FlatList
+          style={{ marginTop: 12 }}
           data={rates}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingVertical: 4,
-              }}
-            >
+            <View style={styles.cardRow}>
               <Text>{item.code}</Text>
               <Text>{item.mid}</Text>
             </View>

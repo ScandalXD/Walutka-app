@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import api from '../api/apiClient';
+import { styles } from '../styles/globalStyles';
 
 export default function PortfolioScreen() {
   const [items, setItems] = useState([]);
@@ -10,7 +11,7 @@ export default function PortfolioScreen() {
     try {
       setLoading(true);
       const res = await api.get('/wallet/portfolio');
-      setItems(res.data); // [{ currency_code, amount }, ...]
+      setItems(res.data || []);
     } catch (err) {
       console.log('ERR PORTFOLIO:', err?.response?.data || err.message);
     } finally {
@@ -23,26 +24,20 @@ export default function PortfolioScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 20, marginBottom: 8 }}>Twój portfel walut</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Twój portfel walut</Text>
 
       {loading ? (
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" style={{ marginTop: 16 }} />
       ) : (
         <FlatList
+          style={{ marginTop: 12 }}
           data={items}
           keyExtractor={(item, index) =>
             item.currency_code + '_' + index.toString()
           }
           renderItem={({ item }) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingVertical: 6,
-                borderBottomWidth: 0.5,
-              }}
-            >
+            <View style={styles.cardRow}>
               <Text style={{ fontWeight: 'bold' }}>{item.currency_code}</Text>
               <Text>{item.amount.toFixed(2)}</Text>
             </View>
