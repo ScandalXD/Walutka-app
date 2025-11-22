@@ -1,7 +1,19 @@
 import axios from 'axios';
+import Constants from 'expo-constants';
+
+const getBaseURL = () => {
+  if (__DEV__) {
+    const host = Constants.expoConfig?.hostUri?.split(':')[0];
+    const url = `http://${host}:3000/api`;
+    console.log('API BASE URL (DEV):', url);
+    return url;
+  }
+  console.log('API BASE URL (PROD):', prodUrl);
+  return prodUrl;
+};
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.102:3000/api',
+  baseURL: getBaseURL(),
 });
 
 export const setAuthToken = (token) => {
