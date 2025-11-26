@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const walletRoutes = require('./routes/walletRoutes');
 const ratesRoutes = require('./routes/ratesRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const paymentsRoutes = require('./routes/paymentsRoutes');
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/rates', ratesRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/payments', paymentsRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
