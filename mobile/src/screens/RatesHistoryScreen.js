@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {  View,  Text,  TextInput,  FlatList,  ActivityIndicator,  Alert,  TouchableOpacity } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import AppButton from '../components/AppButton';
 
 export default function RatesHistoryScreen() {
   const [currency, setCurrency] = useState('EUR');
-  const [data, setData] = useState(null); // { code, currency, rates: [...] }
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [codes, setCodes] = useState([]);
+  const [loadingCodes, setLoadingCodes] = useState(false);
+
+  const loadCodes = async () => {
+    try {
+      setLoadingCodes(true);
+      const res = await api.get('/rates/current');
+      const list = (res.data.rates || []).map((r) => r.code);
+      setCodes(list);
+    } catch (err) {
+      console.log(
+        'ERR CODES (rates history):',
+        err?.response?.data || err.message
+      );
+    } finally {
+      setLoadingCodes(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCodes();
+  }, []);
 
   const loadHistory = async () => {
     const code = currency.trim().toUpperCase();
@@ -47,7 +63,27 @@ export default function RatesHistoryScreen() {
         autoCapitalize="characters"
       />
 
-      <Button title="Pobierz historię" onPress={loadHistory} />
+      <Text style={{ fontSize: 12, color: '#555' }}>Wybierz z listy:</Text>
+      {loadingCodes ? (
+        <Text>Ładowanie listy walut...</Text>
+      ) : (
+        <View style={styles.chipContainer}>
+          {codes.map((code) => (
+            <TouchableOpacity
+              key={code}
+              style={[
+                styles.chip,
+                currency.toUpperCase() === code && styles.chipSelected,
+              ]}
+              onPress={() => setCurrency(code)}
+            >
+              <Text style={styles.chipText}>{code}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+
+      <AppButton title="Pobierz historię" onPress={loadHistory} />
 
       {loading && <ActivityIndicator size="large" style={{ marginTop: 16 }} />}
 

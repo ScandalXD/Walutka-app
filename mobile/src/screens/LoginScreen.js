@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import AppButton from '../components/AppButton';
 
 export default function LoginScreen({ navigation, onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    if (!email || !email.includes('@')) {
+      return Alert.alert('Błąd', 'Podaj poprawny adres email');
+    }
+    if (!password || password.length < 4) {
+      return Alert.alert('Błąd', 'Hasło musi mieć min. 4 znaki');
+    }
+
     try {
       const res = await api.post('/auth/login', { email, password });
       onLogin(res.data.token);
@@ -19,32 +27,35 @@ export default function LoginScreen({ navigation, onLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Logowanie</Text>
+      <View style={styles.authCard}>
+        <Text style={styles.title}>Logowanie</Text>
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        placeholder="podaj email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        style={styles.input}
-      />
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          placeholder="podaj email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          style={styles.input}
+        />
 
-      <Text style={styles.label}>Hasło</Text>
-      <TextInput
-        placeholder="podaj hasło"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+        <Text style={styles.label}>Hasło</Text>
+        <TextInput
+          placeholder="podaj hasło"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
 
-      <Button title="Zaloguj" onPress={handleLogin} />
-      <View style={{ height: 12 }} />
-      <Button
-        title="Nie masz konta? Zarejestruj się"
-        onPress={() => navigation.navigate('Register')}
-      />
+        <AppButton title="Zaloguj" onPress={handleLogin} />
+
+        <AppButton
+          title="Nie masz konta? Zarejestruj się"
+          variant="secondary"
+          onPress={() => navigation.navigate('Register')}
+        />
+      </View>
     </View>
   );
 }

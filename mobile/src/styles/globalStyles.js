@@ -71,4 +71,37 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e7ff',
   },
+
+    infoBox: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#e6f0ff',
+    borderWidth: 1,
+    borderColor: '#c7d7ff',
+    marginBottom: 12,
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  chip: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#aac4f4',
+    backgroundColor: 'white',
+    marginRight: 6,
+    marginBottom: 6,
+  },
+  chipSelected: {
+    backgroundColor: '#cceeff',
+  },
+  chipText: {
+    fontSize: 13,
+    color: '#003366',
+  },
+
 });

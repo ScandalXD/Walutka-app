@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Button } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import api from '../api/apiClient';
 import { styles } from '../styles/globalStyles';
+import AppButton from '../components/AppButton';
 import RateItem from '../components/RateItem';
 
 export default function RatesScreen() {
@@ -30,7 +31,7 @@ export default function RatesScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Aktualne kursy walut</Text>
 
-      <Button title="Odśwież kursy" onPress={loadRates} />
+      <AppButton title="Odśwież kursy" onPress={loadRates} />
 
       {date && <Text style={{ marginTop: 8 }}>Data tabeli: {date}</Text>}
 

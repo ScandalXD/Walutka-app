@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { styles } from '../styles/globalStyles';
 
 export default function DashboardScreen({ navigation, onLogout }) {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Kantor mobilny</Text>
-      <Text style={{ marginBottom: 12, color: '#555' }}>
+      <Text style={{ marginBottom: 12, color: '#4b5563', fontSize: 14 }}>
         Wybierz jedną z dostępnych opcji, aby zarządzać swoim portfelem
         walutowym.
       </Text>
@@ -18,7 +18,7 @@ export default function DashboardScreen({ navigation, onLogout }) {
           style={styles.menuButton}
           onPress={() => navigation.navigate('WalletTopUp')}
         >
-          <Text style={styles.menuButtonText}>Zasil konto (PLN)</Text>
+          <Text style={styles.menuButtonText}>Zasil konto (PLN) – PayU</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -67,7 +67,7 @@ export default function DashboardScreen({ navigation, onLogout }) {
 
       <View style={[styles.menuSection, { marginBottom: 24 }]}>
         <TouchableOpacity
-          style={[styles.menuButton, styles.logoutButton]}
+          style={[styles.menuButton, { backgroundColor: '#ef4444', borderColor: '#b91c1c' }]}
           onPress={onLogout}
         >
           <Text style={[styles.menuButtonText, { color: 'white' }]}>
