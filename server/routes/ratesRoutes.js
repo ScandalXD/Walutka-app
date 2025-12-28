@@ -5,7 +5,7 @@ const axios = require('axios');
 
 const router = express.Router();
 
-// F4/F5: aktualne kursy – tabela A z NBP
+// Aktualne kursy – tabela z NBP
 router.get('/current', auth, async (req, res) => {
   try {
     const response = await axios.get(
@@ -14,7 +14,7 @@ router.get('/current', auth, async (req, res) => {
     const table = response.data[0];
     const effectiveDate = table.effectiveDate;
 
-    // zapis do EXCHANGE_RATES (prosto: kasujemy i wstawiamy)
+    // Zapis do EXCHANGE_RATES
     db.serialize(() => {
       db.run('DELETE FROM EXCHANGE_RATES');
       const stmt = db.prepare(
@@ -33,19 +33,19 @@ router.get('/current', auth, async (req, res) => {
   }
 });
 
-// 🔥 F5: archiwalne kursy jednej waluty
+// Archiwalne kursy jednej waluty
 router.get('/history/:code', auth, async (req, res) => {
   const code = req.params.code.toUpperCase();
 
   try {
-    // pobieramy ostatnie 10 notowań z NBP
+    // Ostatnie 10 notowań z NBP
     const response = await axios.get(
       `https://api.nbp.pl/api/exchangerates/rates/A/${code}/last/10/?format=json`
     );
 
-    const data = response.data; // { code, currency, rates: [ { effectiveDate, mid }, ... ] }
+    const data = response.data;
 
-    // zapisujemy do EXCHANGE_RATES_HISTORY (opcjonalnie, ale ładnie wygląda w projekcie)
+    // Zapis do EXCHANGE_RATES_HISTORY
     db.serialize(() => {
       const stmt = db.prepare(
         'INSERT INTO EXCHANGE_RATES_HISTORY (currency_code, mid_rate, rate_date) VALUES (?, ?, ?)'
@@ -56,7 +56,7 @@ router.get('/history/:code', auth, async (req, res) => {
       stmt.finalize();
     });
 
-    // zwracamy po prostu то, что вернул NBP
+    // Dane z NBP
     res.json(data);
   } catch (err) {
     console.error(err.message);
