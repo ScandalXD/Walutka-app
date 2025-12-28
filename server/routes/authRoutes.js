@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const router = express.Router();
 
-// F1: Rejestracja
+// Rejestracja
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
   });
 });
 
-// F2: Logowanie
+// Logowanie
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
 
@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
   });
 });
 
-// F10: Wylogowanie 
+// Wylogowanie 
 router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out (usun token w aplikacji)' });
 });
