@@ -4,7 +4,7 @@ const auth = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// F3: Zasilenie konta (waluta bazowa PLN)
+// Zasilenie konta (waluta bazowa PLN)
 router.post('/topup', auth, (req, res) => {
   const userId = req.user.userId;
   const { amount } = req.body;
@@ -13,7 +13,7 @@ router.post('/topup', auth, (req, res) => {
   if (!amount || amount <= 0)
     return res.status(400).json({ message: 'Kwota musi być > 0' });
 
-  // sprawdzamy, czy zapis istnieje
+  // Aktualizacja lub dodawanie salda użytkownika w wybranej walucie
   db.get(
     'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
     [userId, currency],
@@ -41,7 +41,7 @@ router.post('/topup', auth, (req, res) => {
   );
 });
 
-// F9: Podgląd portfela
+// Podgląd portfela
 router.get('/portfolio', auth, (req, res) => {
   const userId = req.user.userId;
   db.all(
