@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/payu/create', auth, async (req, res) => {
   try {
     const { amount } = req.body;
-    const user = req.user; // { userId, email, ... }
+    const user = req.user;
 
     const value = parseFloat(amount);
     if (!value || value <= 0) {
