@@ -4,7 +4,7 @@ const auth = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// helper – pobranie kursu z tabeli EXCHANGE_RATES
+// Pobranie kursu z tabeli EXCHANGE_RATES
 function getRate(code, cb) {
   db.get(
     'SELECT mid_rate FROM EXCHANGE_RATES WHERE currency_code = ?',
@@ -16,10 +16,10 @@ function getRate(code, cb) {
   );
 }
 
-// F6: kupno waluty (PLN -> np. EUR)
+// Kupno waluty (PLN -> np. EUR)
 router.post('/buy', auth, (req, res) => {
   const userId = req.user.userId;
-  const { currencyTo, amountPln } = req.body; // kwota w PLN
+  const { currencyTo, amountPln } = req.body;
 
   if (!currencyTo || !amountPln || amountPln <= 0) {
     return res.status(400).json({ message: 'Błędne dane wejściowe' });
@@ -31,7 +31,7 @@ router.post('/buy', auth, (req, res) => {
     const amountForeign = amountPln / rate;
 
     db.serialize(() => {
-      // sprawdzamy saldo PLN
+      // Sprawdzanie salda w PLN
       db.get(
         'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
         [userId, 'PLN'],
@@ -40,13 +40,13 @@ router.post('/buy', auth, (req, res) => {
             return res.status(400).json({ message: 'Za mało PLN na koncie' });
           }
 
-          // odejmujemy PLN
+          // Odejmowanie PLN
           db.run(
             'UPDATE WALLET_BALANCE SET amount = amount - ? WHERE balance_id = ?',
             [amountPln, pln.balance_id]
           );
 
-          // dodajemy walutę obcą
+          // Dodanie waluty obcej
           db.get(
             'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
             [userId, currencyTo],
@@ -63,7 +63,7 @@ router.post('/buy', auth, (req, res) => {
                 );
               }
 
-              // zapis transakcji BUY
+              // Zapis transakcji kupna
               db.run(
                 `INSERT INTO TRANSACTIONS
                  (user_id, type, currency_from, currency_to, amount, rate)
@@ -84,10 +84,10 @@ router.post('/buy', auth, (req, res) => {
   });
 });
 
-// 🔥 F7: sprzedaż waluty (np. EUR -> PLN)
+// Sprzedaż waluty (np. EUR -> PLN)
 router.post('/sell', auth, (req, res) => {
   const userId = req.user.userId;
-  const { currencyFrom, amountForeign } = req.body; // kwota w walucie obcej
+  const { currencyFrom, amountForeign } = req.body;
 
   if (!currencyFrom || !amountForeign || amountForeign <= 0) {
     return res.status(400).json({ message: 'Błędne dane wejściowe' });
@@ -99,7 +99,7 @@ router.post('/sell', auth, (req, res) => {
     const amountPln = amountForeign * rate;
 
     db.serialize(() => {
-      // 1. sprawdzamy saldo waluty obcej
+      // Sprawdzanie salda waluty obcej
       db.get(
         'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
         [userId, currencyFrom],
@@ -110,13 +110,13 @@ router.post('/sell', auth, (req, res) => {
               .json({ message: 'Za mało ' + currencyFrom + ' na koncie' });
           }
 
-          // 2. odejmujemy walutę obcą
+          // Odejmowanie walutu obcej
           db.run(
             'UPDATE WALLET_BALANCE SET amount = amount - ? WHERE balance_id = ?',
             [amountForeign, foreign.balance_id]
           );
 
-          // 3. dodajemy PLN
+          // Dodawanie PLN
           db.get(
             'SELECT * FROM WALLET_BALANCE WHERE user_id = ? AND currency_code = ?',
             [userId, 'PLN'],
@@ -133,7 +133,7 @@ router.post('/sell', auth, (req, res) => {
                 );
               }
 
-              // 4. zapis transakcji SELL
+              // Zapis transakcji sprzedaży
               db.run(
                 `INSERT INTO TRANSACTIONS
                  (user_id, type, currency_from, currency_to, amount, rate)
@@ -154,7 +154,7 @@ router.post('/sell', auth, (req, res) => {
   });
 });
 
-// F8: historia transakcji
+// Historia transakcji
 router.get('/history', auth, (req, res) => {
   const userId = req.user.userId;
 
